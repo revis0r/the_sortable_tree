@@ -24,6 +24,7 @@ module TheSortableTreeHelper
   def sortable_tree(tree, options= {})
     opts = {
       :max_levels => 3,
+      :depth      => nil,
       :type       => :tree,
       :js         => false,
       :path       => false,
@@ -50,6 +51,7 @@ module TheSortableTreeHelper
   end
 
   def sortable_tree_builder(tree, options= {})
+    return '' unless options[:depth].nil? || options[:depth].to_i > 0
     result = ''
     opts   = {
       :id    => :id,        # node id field
@@ -60,6 +62,10 @@ module TheSortableTreeHelper
 
     root = opts[:root]
     node = opts[:node]
+    
+    if opts[:depth].is_a?(Integer)
+      opts[:depth] -= 1
+    end
 
     unless node
       roots = tree.select{ |elem| elem.parent_id.nil? }
